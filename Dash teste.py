@@ -4,29 +4,24 @@ import streamlit as st
 # 1. Configuração da página web
 st.set_page_config(page_title="Dashboard de Fundos", layout="wide")
 
-# Título principal do Dashboard na página web
-st.title("📊 Painel de Controle - Fundos de Investimento")
+st.title("Painel de Controle - Fundos de Investimento")
 st.markdown("---")
 
-# 2. Carregar os dados (mesma lógica do Pandas que vocês já conhecem)
 df = pd.read_csv('Dados.csv')
 df.columns = df.columns.str.strip()
 
-# Criamos os fundos únicos para os filtros cadastrais
 df_fundos = df.drop_duplicates(subset=['nomeFundo'])
 
-# 3. Criando uma barra lateral de filtros (Sidebar)
-st.sidebar.header("🔍 Filtros do Painel")
+# 2. Barra lateral 
+st.sidebar.header("   ")
 fundo_selecionado = st.sidebar.selectbox(
-    "Selecione o Fundo para análise detalhada:",
+    "Fundo:",
     options=df_fundos['nomeFundo'].tolist()
 )
 
-# Filtrando a linha do fundo escolhido pelo usuário na barra lateral
 dados_fundo = df_fundos[df_fundos['nomeFundo'] == fundo_selecionado].iloc[0]
 
-# 4. EXIBINDO OS DADOS NO DASHBOARD VISUAL
-# Vamos dividir a tela em 3 colunas visuais usando o Streamlit
+# 3. Exibição dos dados
 col1, col2, col3 = st.columns(3)
 
 with col1:
@@ -35,7 +30,8 @@ with col1:
     st.write(f"**CNPJ Fundo:** {dados_fundo['CNPJ_FUNDO']}")
 
 with col2:
-    # Formatando o PL de forma bonita
+
+# 4. Formatando o PL 
     pl_bruto = float(dados_fundo['pl'])
     pl_formatado = f"R$ {pl_bruto:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
     
@@ -50,6 +46,4 @@ with col3:
 
 st.markdown("---")
 
-# 5. BÔNUS: Exibir a tabela completa de dados brutos na página se o usuário quiser
-st.subheader("📋 Visualização da Base de Dados Filtrada")
-st.dataframe(df_fundos[['CNPJ_FUNDO', 'nomeFundo', 'tipoCarteira', 'pl', 'gestor']], use_container_width=True)
+
